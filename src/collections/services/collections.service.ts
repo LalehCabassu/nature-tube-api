@@ -1,25 +1,23 @@
-import { Injectable } from '@nestjs/common';
-import {Collection} from "../models/collection";
+import {Injectable, Logger} from '@nestjs/common';
+import {CollectionModel} from "../models/collection.model";
+import {child, getDatabase, get, ref, set} from "firebase/database";
 
 @Injectable()
 export class CollectionsService {
 
     private readonly firstCollectionId = '1';
     private readonly secondCollectionId = '2';
-    private readonly firstVideoId = '11';
-    private readonly secondVideoId = '22';
 
-    private collections: Map<string, Collection>;
+    private collections: Map<string, CollectionModel>;
 
     constructor() {
 
-        this.collections = new Map<string, Collection>();
+        this.collections = new Map<string, CollectionModel>();
 
         this.collections.set(this.firstCollectionId, {
             id: this.firstCollectionId,
             title: 'AuraMax',
             videos: [{
-                id: this.firstVideoId,
                 title: 'AuraMax 2021 11 04',
                 uri: 'http://data.phys.ucalgary.ca/sort_by_project/AuroraMAX/rt-movies/mp4/2021/11/04/auroramaxHD_20211104_720p.mp4'
             }]
@@ -29,28 +27,47 @@ export class CollectionsService {
             id: this.secondCollectionId,
             title: 'YouTube',
             videos: [{
-                id: this.secondVideoId,
                 title: 'NASA Live',
                 uri: 'https://www.youtube.com/watch?v=fk5PWZIATvU'
             }]
         });
     }
 
-    getAllCollections(): Collection[] {
+    getAllCollections(): CollectionModel[] {
+
+        const dbRef = ref(getDatabase());
+        get(child(dbRef, `collections`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                return snapshot.val();
+            } else {
+                console.log("No data available");
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+
         return Array.from(this.collections.values());
     }
 
-    getCollection(id: string): Collection {
+    getCollection(id: string): CollectionModel {
         return this.collections.get(id);
     }
 
-    addCollection(collection: Collection) {
+    addCollection(collection: CollectionModel) {
         const id = '3';
-        this.collections.set(id, {
+        // this.collections.set(id, {
+        //     id: id,
+        //     title: collection.title,
+        //     videos: collection.videos ? [{
+        //         title: collection.videos[0].title,
+        //         uri: collection.videos[0].uri
+        //     }] : []
+        // });
+        const db = getDatabase();
+        set(ref(db, 'collections/' + id), {
             id: id,
             title: collection.title,
             videos: collection.videos ? [{
-                id: '33',
                 title: collection.videos[0].title,
                 uri: collection.videos[0].uri
             }] : []

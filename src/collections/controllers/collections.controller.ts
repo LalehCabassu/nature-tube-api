@@ -1,6 +1,6 @@
 import {Body, Controller, Get, Param, Post} from '@nestjs/common';
 import {CollectionsService} from "../services/collections.service";
-import {Collection} from "../models/collection";
+import {CollectionModel} from "../models/collection.model";
 
 @Controller('collections')
 export class CollectionsController {
@@ -9,17 +9,18 @@ export class CollectionsController {
     }
 
     @Get()
-    async getAllCollections(): Promise<Collection[]> {
+    async getAllCollections(): Promise<CollectionModel[]> {
         return this.collectionsService.getAllCollections();
     }
 
     @Get(':id')
-    async getCollection(@Param('id') id: string): Promise<Collection> {
+    async getCollection(@Param('id') id: string): Promise<CollectionModel> {
         return this.collectionsService.getCollection(id);
     }
 
     @Post()
     async addCollection(@Body('collection') collection): Promise<void> {
-        this.collectionsService.addCollection(collection);
+    // async addCollection(): Promise<void> {
+        await this.collectionsService.addCollection(collection);
     }
 }
