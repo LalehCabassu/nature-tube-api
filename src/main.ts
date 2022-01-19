@@ -13,6 +13,9 @@ async function bootstrap() {
     logger: ['log', 'error', 'warn']
   });
 
+  // TODO: (temporary) to make it work locally
+  app.enableCors();
+
   app.useGlobalPipes(new ValidationPipe({
     disableErrorMessages: true
   }));

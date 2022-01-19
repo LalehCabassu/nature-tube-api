@@ -1,26 +1,25 @@
-import {Body, Controller, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Get, Logger, Param, Post, Query} from '@nestjs/common';
 import {CollectionsService} from "../services/collections.service";
 import {CollectionModel} from "../models/collection.model";
 
-@Controller('collections')
+@Controller()
 export class CollectionsController {
 
     constructor(private readonly collectionsService: CollectionsService) {
     }
 
-    @Get()
+    @Get('collections')
     async getAllCollections(): Promise<CollectionModel[]> {
-        return this.collectionsService.getAllCollections();
+        return await this.collectionsService.getAllCollections();
     }
 
-    @Get(':id')
-    async getCollection(@Param('id') id: string): Promise<CollectionModel> {
-        return this.collectionsService.getCollection(id);
+    @Get('collection')
+    async getCollection(@Query('id') id: string): Promise<CollectionModel> {
+        return await this.collectionsService.getCollection(id);
     }
 
-    @Post()
-    async addCollection(@Body('collection') collection): Promise<void> {
-    // async addCollection(): Promise<void> {
-        await this.collectionsService.addCollection(collection);
+    @Post('collection')
+    async addCollection(@Body() collection: CollectionModel): Promise<CollectionModel> {
+        return await this.collectionsService.addCollection(collection);
     }
 }
