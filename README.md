@@ -1,3 +1,7 @@
+# NatureTube API
+**A REST API built using**
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
@@ -23,6 +27,7 @@
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
+**It is the backend of the [NatureTube SPA](https://github.com/LalehCabassu/nature-tube).**
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
